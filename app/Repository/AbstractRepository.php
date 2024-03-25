@@ -17,11 +17,25 @@ abstract class AbstractRepository implements RepositoryInterface
     }
 
     public static function findByMonthAndYear(int $month, int $year):Collection|null{
-        return self::loadModel()::query()->whereMonth('created_at', $month)->whereYear('created_at', $year)->get();
+        return self::loadModel()::query()->whereMonth('created_at', $month)->whereYear('created_at', $year)->get()->map(function ($item) {
+            $item['amount'] = "$ ".number_format($item['amount'], 2, ',', '.');
+            return $item;
+        });
     }
 
     public static function create(array $attributes = []):Model|null{
-        return self::loadModel()::query()->create($attributes);
+        $model = self::loadModel()::query()->create($attributes);
+        $model->user()->associate(auth()->user());
+        $model->save();
+        return $model;
+    }
+    
+    public static function total():float|null{
+        return self::loadModel()::query()->where('user_id', auth()->user()->id)->sum('amount');
+    }
+
+    public static function all():Collection|null{
+        return self::loadModel()::where('user_id', auth()->user()->id)->get();
     }
 
 }

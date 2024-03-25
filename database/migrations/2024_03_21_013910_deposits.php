@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,8 +16,10 @@ return new class extends Migration
             $table->id();
             $table->float('amount');
             $table->string('description');
-            $table->integer('status')->default(1);
+            $table->string('status')->default('pending');
             $table->timestamps();
+
+            $table->foreignIdFor(User::class);
         });
     }
 
