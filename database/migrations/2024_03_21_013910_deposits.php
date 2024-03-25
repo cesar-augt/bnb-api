@@ -17,9 +17,10 @@ return new class extends Migration
             $table->float('amount');
             $table->string('description');
             $table->string('status')->default('pending');
+            $table->string('name_image');
             $table->timestamps();
 
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(User::class)->notNull();
         });
     }
 

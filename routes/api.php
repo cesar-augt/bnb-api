@@ -19,7 +19,6 @@ Route::post('/deposit/file', [
     Deposit::class, "upload"
 ])->middleware('auth:sanctum');
 
-
 Route::put('/deposit/approve/{id}', [
     Deposit::class, "approve"
 ])->middleware('auth:sanctum');

@@ -12,7 +12,8 @@ class Deposit extends Model
     protected $fillable = [
         'user_id',
         'amount',
-        'description'
+        'description',
+        'name_image'
     ];
 
     public function user()
