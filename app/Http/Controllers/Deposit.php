@@ -35,7 +35,7 @@ class Deposit extends Controller
     {
         $foto = $request->file('foto');
         $nomeFoto = time() . '.' . $foto->getClientOriginalExtension();
-        $foto->storeAs('fotos', $nomeFoto);
+        $foto->storeAs('public/fotos', $nomeFoto);
         $repository =  $request->only('amount', 'description');
         $repository['name_image'] = $nomeFoto;
         $repository['user_id'] = auth()->user()->id;
