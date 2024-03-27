@@ -17,10 +17,7 @@ abstract class AbstractRepository implements RepositoryInterface
     }
 
     public static function findByMonthAndYear(int $month, int $year):Collection|null{
-        return self::loadModel()::query()->whereMonth('created_at', $month)->whereYear('created_at', $year)->get()->map(function ($item) {
-            $item['amount'] = $item['amount'];
-            return $item;
-        });
+        return self::loadModel()::query()->whereMonth('created_at', $month)->whereYear('created_at', $year)->get();
     }
 
     public static function create(array $attributes = []):Model|null{
