@@ -6,9 +6,6 @@ namespace App\Services;
 
 use App\Repository\DepositRepository;
 use App\Repository\PurchaseRepository;
-use Carbon\Carbon;
-
-use function PHPSTORM_META\map;
 
 class BalanceService
 {
@@ -19,7 +16,7 @@ class BalanceService
             return $item;
         });
         $purchase = collect(PurchaseRepository::findByMonthAndYear($month, $year))->map(function ($item) {
-            $item['type'] = 'puchase';
+            $item['type'] = 'purchases';
             return $item;
         });
         $balance = $deposit->merge($purchase)->sortBy('created_at');
