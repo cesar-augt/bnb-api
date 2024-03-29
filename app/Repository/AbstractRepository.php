@@ -22,11 +22,10 @@ abstract class AbstractRepository implements RepositoryInterface
 
     public static function create(array $attributes = []):Model|null{
         $attributes['user_id'] = auth()->user()->id;
-        $model = self::loadModel()::query()->create($attributes);
-        return $model;
+        return self::loadModel()::query()->create($attributes);
     }
     
-    public static function total():float|null{
+    public static function total(){
         return self::loadModel()::query()->where('user_id', auth()->user()->id)->sum('amount');
     }
 
