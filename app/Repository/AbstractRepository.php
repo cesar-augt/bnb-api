@@ -29,8 +29,4 @@ abstract class AbstractRepository implements RepositoryInterface
         return self::loadModel()::query()->where('user_id', auth()->user()->id)->sum('amount');
     }
 
-    public static function all():Collection|null{
-        return self::loadModel()::where('user_id', auth()->user()->id)->get();
-    }
-
 }

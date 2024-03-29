@@ -10,10 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 interface RepositoryInterface
 {
     public static function create(array $attributes):Model|null;
-    //public static function find(int $id):Model|null;
+
     public static function loadModel():Model;
-    public static function all():Collection|null;
-    public static function total();
-    
+
+    public static function total();    
     
 }

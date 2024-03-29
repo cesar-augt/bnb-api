@@ -26,12 +26,12 @@ class Deposit extends Controller
 
     public function findGroupByStatus()
     {
-        return  DepositRepository::all()->groupBy('status')->toArray();
+        return  DepositRepository::loadModel()->all()->groupBy('status')->toArray();
     }
 
     public function findPending()
     {
-        return  DepositRepository::all()->where('status', 'pending');
+        return  DepositRepository::loadModel()->all()->where('status', 'pending');
     }
     
     public function upload(DepositRequest $request)
