@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('date');
             $table->timestamps();
 
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(User::class)->notNull();
         });
     }
 
