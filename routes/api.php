@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth;
 use App\Http\Controllers\Balance;
 use App\Http\Controllers\Deposit;
 use App\Http\Controllers\Purchase;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -58,3 +59,8 @@ Route::post('/login', [
 Route::post('/login/store', [
     Auth::class, "store"
 ]);
+
+Route::get('/login/admin', function (Request $request) {
+    return true;
+})->middleware(['auth:sanctum', 'can:check control']);
+
