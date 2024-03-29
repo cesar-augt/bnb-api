@@ -21,9 +21,8 @@ abstract class AbstractRepository implements RepositoryInterface
     }
 
     public static function create(array $attributes = []):Model|null{
+        $attributes['user_id'] = auth()->user()->id;
         $model = self::loadModel()::query()->create($attributes);
-        $model->user()->associate(auth()->user());
-        $model->save();
         return $model;
     }
     
