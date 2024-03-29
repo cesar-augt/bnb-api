@@ -4,7 +4,6 @@ use App\Http\Controllers\Auth;
 use App\Http\Controllers\Balance;
 use App\Http\Controllers\Deposit;
 use App\Http\Controllers\Purchase;
-use App\Http\Middleware\AuthUser;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -47,9 +46,10 @@ Route::get('/balance/{month}/{year}', [
     Balance::class, "findByMonthAndYear"
 ])->middleware('auth:sanctum');
 
-Route::get('/control', [
-    Deposit::class, "findPending"
-])->middleware('auth:sanctum');
+Route::middleware(['auth:sanctum', 'can:check control'])->get(
+    '/control', [
+        Deposit::class, "findPending"
+    ]);
 
 Route::post('/login', [
     Auth::class, "login"
@@ -58,4 +58,3 @@ Route::post('/login', [
 Route::post('/login/store', [
     Auth::class, "store"
 ]);
-

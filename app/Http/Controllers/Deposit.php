@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DepositRequest;
 use App\Repository\DepositRepository;
 use Illuminate\Http\Request;
+use Cloudinary\Api\Upload\UploadApi;
+use Cloudinary\Configuration\Configuration;
 
 class Deposit extends Controller
 {
@@ -31,22 +34,16 @@ class Deposit extends Controller
         return  DepositRepository::all()->where('status', 'pending');
     }
     
-    public function upload(Request $request)
-    {
-        $foto = $request->file('foto');
-        $nomeFoto = time() . '.' . $foto->getClientOriginalExtension();
-        $foto->storeAs('public/fotos', $nomeFoto);
-        $repository =  $request->only('amount', 'description');
-        $repository['name_image'] = $nomeFoto;
+    public function upload(DepositRequest $request)
+    {        
+        $request->validated();
+        Configuration::instance(env('CLOUDINARY_URL'));
+        $foto = $request->file('check_file');
+        $result = (new UploadApi())->upload($foto->getRealPath());
+        $repository = $request->only('amount', 'description');
+        $repository['url_image'] = $result['secure_url'];
         $repository['user_id'] = auth()->user()->id;
-
-        DepositRepository::create($repository);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Foto salva com sucesso!',
-            'url_foto' => asset('storage/fotos/' . $nomeFoto),
-        ]);
+        return DepositRepository::create($repository);
     }
 
     public function approve(int $id)
@@ -54,7 +51,7 @@ class Deposit extends Controller
         $deposit = DepositRepository::loadModel()->find($id);
         $deposit->status = 'approved';
         $deposit->save();
-        return  $deposit;
+        return $deposit;
     }
 
     public function reject(int $id)

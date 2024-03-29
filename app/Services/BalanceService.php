@@ -8,12 +8,20 @@ use App\Repository\DepositRepository;
 use App\Repository\PurchaseRepository;
 use Carbon\Carbon;
 
+use function PHPSTORM_META\map;
+
 class BalanceService
 {
     public function findByMonthAndYear(int $month, int $year):array{
         
-        $deposit = collect(DepositRepository::findByMonthAndYear($month, $year));
-        $purchase = collect(PurchaseRepository::findByMonthAndYear($month, $year));
+        $deposit = collect(DepositRepository::findByMonthAndYear($month, $year))->map(function ($item) {
+            $item['type'] = 'deposit';
+            return $item;
+        });
+        $purchase = collect(PurchaseRepository::findByMonthAndYear($month, $year))->map(function ($item) {
+            $item['type'] = 'puchase';
+            return $item;
+        });
         $balance = $deposit->merge($purchase)->sortBy('created_at');
         return [
             'total_purchases' => PurchaseRepository::total(),

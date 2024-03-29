@@ -3,21 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AuthRequest;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+
 
 class Auth extends Controller
 {
-    public function login(Request $authRequest){
-
-        $user = User::where('email', $authRequest->email)->first();
+    public function login(LoginRequest $request){
+        $request->validated();
+        $user = User::where('email', $request->email)->first();
         
-        if (! $user || ! Hash::check($authRequest->password, $user->password)) {
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
-    
+        
         $token = $user->createToken($user->id)->plainTextToken;
     
         return response()->json([
@@ -25,23 +26,13 @@ class Auth extends Controller
         ]);
     } 
 
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
-
-        // Validação dos dados
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
-        ]);
-
-        // Criação do usuário
+        $request->validated();
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->save();
-
-        return response()->json(['message' => 'Usuário criado com sucesso'], 201);
+        return $user->save();
     }
 }

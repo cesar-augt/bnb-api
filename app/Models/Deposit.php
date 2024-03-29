@@ -13,7 +13,11 @@ class Deposit extends Model
         'user_id',
         'amount',
         'description',
-        'name_image'
+        'url_image'
+    ];
+
+    protected $casts = [
+        'created_at' => 'date:d/m/Y H:i',
     ];
 
     public function user()

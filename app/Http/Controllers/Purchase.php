@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PurchaseRequest;
 use App\Repository\PurchaseRepository;
-use Illuminate\Http\Request;
 
 class Purchase extends Controller
 {
-    public function create(Request $request)
+    public function create(PurchaseRequest $request)
     {
         return PurchaseRepository::create($request->all());
     }
