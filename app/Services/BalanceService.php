@@ -11,7 +11,7 @@ class BalanceService
 {
     public function findByMonthAndYear(int $month, int $year):array{
         
-        $deposit = collect(DepositRepository::findByMonthAndYear($month, $year))->map(function ($item) {
+        $deposit = collect(DepositRepository::findByMonthAndYearApproved($month, $year))->map(function ($item) {
             $item['type'] = 'deposit';
             return $item;
         });
