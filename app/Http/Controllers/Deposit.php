@@ -31,7 +31,7 @@ class Deposit extends Controller
 
     public function findPending()
     {
-        return  DepositRepository::loadModel()->all()->where('status', 'pending');
+        return  DepositRepository::loadModel()::query()->with('user')->where('status', 'pending')->get();
     }
     
     public function upload(DepositRequest $request)
