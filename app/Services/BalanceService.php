@@ -26,4 +26,12 @@ class BalanceService
             'balance' => [...$balance->toArray()]
         ];
     }
+
+    public function hasFounds($value_purchase){
+        $total = DepositRepository::total() -  PurchaseRepository::total();
+        if($total >= $value_purchase['amount']){  
+            return true;
+        }
+        return false;
+    }
 }
