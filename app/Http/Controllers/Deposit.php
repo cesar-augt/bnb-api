@@ -38,8 +38,8 @@ class Deposit extends Controller
     {        
         $request->validated();
         Configuration::instance(env('CLOUDINARY_URL'));
-        $foto = $request->file('check_file');
-        $result = (new UploadApi())->upload($foto->getRealPath());
+        $file = $request->file('check_file');
+        $result = (new UploadApi())->upload($file->getRealPath());
         $repository = $request->only('amount', 'description');
         $repository['url_image'] = $result['secure_url'];
         $repository['user_id'] = auth()->user()->id;

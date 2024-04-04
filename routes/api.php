@@ -18,13 +18,13 @@ Route::post('/login/store', [
 
 Route::get('/login/admin', function (Request $request) {
     return true;
-})->middleware(['auth:sanctum', 'can:check control']);
+})->middleware(['auth:sanctum','can:check control']);
 
-Route::middleware(['auth:sanctum', 'can:check control'])->get(
+Route::middleware(['auth:sanctum'])->get(
     '/control', [ Deposit::class, "findPending" ]);
 
 
-Route::controller(Deposit::class)->middleware('auth:sanctum')->group(function () {
+Route::controller(Deposit::class)->middleware(['auth:sanctum','can:manage transaction'])->group(function () {
     Route::post('/deposit', 'create');
     Route::post('/deposit/file', 'upload');
     Route::post('/deposit', 'create');
@@ -34,7 +34,7 @@ Route::controller(Deposit::class)->middleware('auth:sanctum')->group(function ()
     Route::get('/deposits/{month}/{year}', 'findByMonthAndYear');
 });
 
-Route::controller(Purchase::class)->middleware('auth:sanctum')->group(function () {
+Route::controller(Purchase::class)->middleware(['auth:sanctum','can:manage transaction'])->group(function () {
     Route::post('/purchase', 'create');
     Route::get('/purchases/{month}/{year}', 'findByMonthAndYear');
 });

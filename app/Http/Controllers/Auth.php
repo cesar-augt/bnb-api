@@ -33,6 +33,8 @@ class Auth extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        return $user->save();
+        $user->save();
+        $user->givePermissionTo('manage transaction');
+        return $user;
     }
 }
