@@ -4,13 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DepositRequest;
+use App\Providers\Interfaces\BucketProviderContract;
 use App\Repository\DepositRepository;
+use App\Services\UploadService;
 use Illuminate\Http\Request;
 use Cloudinary\Api\Upload\UploadApi;
 use Cloudinary\Configuration\Configuration;
 
 class Deposit extends Controller
 {
+    public function __construct(private BucketProviderContract $bucketProvider, public UploadService $uploadService) {
+    }
+
+
     public function create(Request $request)
     {
         return DepositRepository::create($request->all());
@@ -36,6 +42,7 @@ class Deposit extends Controller
     
     public function upload(DepositRequest $request)
     {        
+        dd('a');
         $request->validated();
         Configuration::instance(env('CLOUDINARY_URL'));
         $file = $request->file('check_file');
@@ -44,6 +51,15 @@ class Deposit extends Controller
         $repository['url_image'] = $result['secure_url'];
         $repository['user_id'] = auth()->user()->id;
         return DepositRepository::create($repository);
+    }
+
+
+    public function uploadFile(Request $request)
+    {        
+        $file = $request->file('check_file');
+        $upload = new UploadService($file->getRealPath());
+
+        return $upload->handle($this->bucketProvider);   
     }
 
     public function approve(int $id)

@@ -27,6 +27,7 @@ Route::middleware(['auth:sanctum'])->get(
 Route::controller(Deposit::class)->middleware(['auth:sanctum','can:manage transaction'])->group(function () {
     Route::post('/deposit', 'create');
     Route::post('/deposit/file', 'upload');
+    Route::post('/deposit/file-image', 'uploadFile');
     Route::post('/deposit', 'create');
     Route::put('/deposit/approve/{id}', 'approve');
     Route::put('/deposit/reject/{id}', 'reject');
