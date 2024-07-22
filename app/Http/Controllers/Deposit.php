@@ -57,9 +57,8 @@ class Deposit extends Controller
     public function uploadFile(Request $request)
     {        
         $file = $request->file('check_file');
-        $upload = new UploadService($file->getRealPath());
-
-        return $upload->handle($this->bucketProvider);   
+        $this->uploadService->setPath($file->getRealPath());
+        return $this->uploadService->handle($this->bucketProvider);    
     }
 
     public function approve(int $id)

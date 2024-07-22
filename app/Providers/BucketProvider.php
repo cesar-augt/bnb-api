@@ -15,7 +15,8 @@ class BucketProvider implements BucketProviderContract{
     }
 
     public function uploadFile(string $path):string{
-        $result = (new UploadApi())->upload($path);
+        $api = app(UploadApi::class);
+        $result = $api->upload($path);
         return $result['secure_url'];
     }
 }
